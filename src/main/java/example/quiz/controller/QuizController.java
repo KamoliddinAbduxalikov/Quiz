@@ -42,7 +42,7 @@ public class QuizController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<Void> deleteQuiz(@PathVariable Long id) {
         quizServiceImpl.deleteQuiz(id);
         return ResponseEntity.noContent().build();

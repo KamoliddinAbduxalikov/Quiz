@@ -1,6 +1,5 @@
 package example.quiz.controller;
 
-import example.quiz.domain.AnswerEntity;
 import example.quiz.dto.answer.AnswerSubmitDTO;
 import example.quiz.projection.quiz.QuizProjection;
 import example.quiz.service.AnswerService;
@@ -29,6 +28,7 @@ public class AnswerController {
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<List<QuizProjection>> getAllQuizzes(){
         List<QuizProjection> quizzes = quizServiceImpl.getAllQuizzes();
+
         return ResponseEntity.ok(quizzes);
     }
 

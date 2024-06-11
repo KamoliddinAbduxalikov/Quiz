@@ -23,7 +23,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+   // @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<Void> register(@RequestBody UserRegistrationDTO dto) {
         userServiceImpl.register(dto);
         return ResponseEntity
@@ -32,7 +32,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+   // @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<JwtResponse> login(@RequestBody UserLoginDTO dto) {
         return ResponseEntity
                 .ok(userServiceImpl.login(dto));

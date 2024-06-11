@@ -27,8 +27,4 @@ public class QuestionEntity {
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<OptionEntity> options;
-
-    public QuestionEntity(String questionText) {
-        this.questionText = questionText;
-    }
 }

@@ -1,7 +1,7 @@
 package example.quiz.service.impl;
 
 import example.quiz.domain.OptionEntity;
-import example.quiz.dto.option.OptionSavedDTO;
+import example.quiz.projection.option.OptionProjection;
 import example.quiz.repository.OptionRepository;
 import example.quiz.service.OptionService;
 import org.springframework.stereotype.Service;
@@ -18,18 +18,17 @@ public class OptionServiceImpl implements OptionService {
     }
 
     @Override
-    public void save(OptionSavedDTO option) {
-        optionRepository.save(
-                OptionEntity.builder()
-                        .optionText(option.text())
-                        .isCorrect(option.isCorrect())
-                        .question(option.question())
-                        .build()
-        );
+    public void saveOption(OptionEntity options) {
+        optionRepository.save(options);
     }
 
     @Override
     public List<OptionEntity> getOptionsByQuestionId(Long questionId) {
         return optionRepository.findOptionEntitiesByQuestionId(questionId);
+    }
+
+    @Override
+    public List<OptionProjection> getOptionByQuestionId(Long questionId) {
+        return optionRepository.findOptionByQuestionId(questionId);
     }
 }

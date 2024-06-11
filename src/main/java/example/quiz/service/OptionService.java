@@ -1,13 +1,15 @@
 package example.quiz.service;
 
 import example.quiz.domain.OptionEntity;
-import example.quiz.dto.option.OptionSavedDTO;
+import example.quiz.projection.option.OptionProjection;
 
 import java.util.List;
 
 public interface OptionService {
 
-    void save(OptionSavedDTO option);
+    void saveOption(OptionEntity options);
 
     List<OptionEntity> getOptionsByQuestionId(Long questionId);
+
+    List<OptionProjection> getOptionByQuestionId(Long questionId);
 }

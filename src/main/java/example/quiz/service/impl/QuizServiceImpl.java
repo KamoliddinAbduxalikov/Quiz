@@ -1,8 +1,9 @@
 package example.quiz.service.impl;
 
+import example.quiz.domain.QuestionEntity;
 import example.quiz.domain.QuizEntity;
-import example.quiz.dto.question.QuestionSavedDTO;
 import example.quiz.dto.quiz.QuizCreationDTO;
+import example.quiz.mapper.QuizMapper;
 import example.quiz.projection.quiz.QuizProjection;
 import example.quiz.repository.QuizRepository;
 import example.quiz.service.QuizService;
@@ -15,10 +16,14 @@ public class QuizServiceImpl implements QuizService {
 
     private final QuizRepository quizRepository;
     private final QuestionServiceImpl questionServiceImpl;
+    private final OptionServiceImpl optionServiceImpl;
 
-    public QuizServiceImpl(QuizRepository quizRepository, QuestionServiceImpl questionServiceImpl) {
+    public QuizServiceImpl(QuizRepository quizRepository,
+                           QuestionServiceImpl questionServiceImpl,
+                           OptionServiceImpl optionServiceImpl) {
         this.quizRepository = quizRepository;
         this.questionServiceImpl = questionServiceImpl;
+        this.optionServiceImpl = optionServiceImpl;
     }
 
     @Override
@@ -33,18 +38,17 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public void createQuiz(QuizCreationDTO quiz) {
-        QuizEntity savedQuiz = quizRepository.save(
-                QuizEntity.builder()
-                        .title(quiz.title())
-                        .build()
-        );
+        QuizEntity quizEntity = QuizMapper.INSTANCE.mapQuizCreationDTOToQuizEntity(quiz);
+        for (int i = 0; i < quizEntity.getQuestions().size(); i++) {
+            quizEntity.getQuestions().get(i).setQuiz(quizEntity);
+            questionServiceImpl.createQuestionSavedDTO(quizEntity.getQuestions().get(i));
+        }
 
-        for (int i = 0; i < quiz.questions().size(); i++) {
-            questionServiceImpl.createQuestionSavedDTO(new QuestionSavedDTO(
-                    quiz.questions().get(i).questionText(),
-                    quiz.questions().get(i).options(),
-                    savedQuiz
-            ));
+        for (QuestionEntity questionEntity : quizEntity.getQuestions()) {
+            for (int j = 0; j < questionEntity.getOptions().size(); j++) {
+                questionEntity.getOptions().get(j).setQuestion(questionEntity);
+                optionServiceImpl.saveOption(questionEntity.getOptions().get(j));
+            }
         }
     }
 

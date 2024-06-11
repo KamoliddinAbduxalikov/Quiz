@@ -1,7 +1,7 @@
 package example.quiz.dto.option;
 
 public record OptionCreationDTO(
-        String text,
+        String optionText,
         Boolean isCorrect
 ) {
 }

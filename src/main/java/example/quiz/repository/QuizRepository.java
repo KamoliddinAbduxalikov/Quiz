@@ -14,6 +14,5 @@ public interface QuizRepository extends JpaRepository<QuizEntity, Long> {
     @Query("SELECT q FROM QuizEntity q")
     List<QuizProjection> findAllQuizzes();
 
-    @Query("SELECT q FROM QuizEntity q WHERE q.id =: id")
     QuizProjection findQuizById(Long id);
 }

@@ -25,9 +25,9 @@ public class SecurityConfiguration {
                 .cors(AbstractHttpConfigurer::disable);
 
         http.authorizeHttpRequests(registry -> registry
-                .requestMatchers("/**","/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                .anyRequest().authenticated()
-        )
+                        .requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .anyRequest().authenticated()
+                )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

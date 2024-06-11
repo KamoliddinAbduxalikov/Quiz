@@ -10,6 +10,7 @@ import example.quiz.service.AnswerService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AnswerServiceImpl implements AnswerService {
@@ -29,9 +30,9 @@ public class AnswerServiceImpl implements AnswerService {
     @Override
     public Boolean submitAnswer(AnswerSubmitDTO answer) {
         UserEntity userEntity = userServiceImpl.getUserEntityById(answer.userId());
-        QuestionEntity questionEntity = questionServiceImpl.getQuestionEntityById(answer.questionId());
+        Optional<QuestionEntity> questionEntity = questionServiceImpl.getQuestionEntityById(answer.questionId());
 
-        List<OptionEntity> options = optionServiceImpl.getOptionsByQuestionId(questionEntity.getId());
+        List<OptionEntity> options = optionServiceImpl.getOptionsByQuestionId(questionEntity.get().getId());
 
         OptionEntity option = options.stream()
                 .filter(o -> o.getIsCorrect().equals(true)
@@ -41,7 +42,7 @@ public class AnswerServiceImpl implements AnswerService {
         if (option != null) {
             answerRepository.save(
                     AnswerEntity.builder()
-                            .question(questionEntity)
+                            .question(questionEntity.get())
                             .user(userEntity)
                             .givenAnswer(answer.givenAnswer())
                             .build()
